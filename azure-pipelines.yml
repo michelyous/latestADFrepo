@@ -18,6 +18,8 @@ stages:
         backendServiceArm: 'myserviceconnection'
         backendAzureRmResourceGroupName: 'myResourceGroup'
         backendAzureRmStorageAccountName: 'mystorageaccountmichel'
+        backendAzureRmContainerName: 'mycontainer'
+
 
 
 
