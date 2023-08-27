@@ -20,6 +20,13 @@ stages:
         backendAzureRmStorageAccountName: 'mystorageaccountmichel'
         backendAzureRmContainerName: 'mycontainer'
         backendAzureRmKey: $(TerraformBackendKey)
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      inputs:
+       provider: 'azurerm'
+       command: 'apply'
+       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+       environmentServiceNameAzureRM: 'myserviceconnection'
+       environmentServiceNameAzureRm: 'myserviceconnection'
 
 
 
