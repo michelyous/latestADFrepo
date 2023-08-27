@@ -1,18 +1,17 @@
 stages:
-  - stage: Dev
-    displayName: Dev
-    jobs:
-      - job: DeployADF
-        displayName: Deploy ADF
-        pool:
-          vmImage: ubuntu-latest
-        steps:
-          - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
-            inputs:
-              terraformVersion: '1.1.0'
-          - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformTaskV1@0
-            inputs:
-              provider: 'azurerm'
-              command: 'init'
-              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-              backendServiceArm: 'myserviceconnection'
+- stage: Dev
+  displayName: Dev
+  jobs:
+  - job: DeployADF
+    displayName: Deploy ADF
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+      inputs:
+        terraformVersion: '1.1.0'
+    - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
