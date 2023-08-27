@@ -3,8 +3,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "adf_rg" {
-  name     = var.resource_group_name
-  location = var.location
+  name     = "myResourceGroup"
+  location = "francecentral"
 }
 
 resource "azurerm_data_factory" "adf" {
