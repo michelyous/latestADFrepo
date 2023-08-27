@@ -23,7 +23,7 @@ stages:
     - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       inputs:
        provider: 'azurerm'
-       command: 'apply -var="adf_name=MyADF" -var="resource_group_name=myResourceGroup" -var="location=France Central"'
+       command: 'apply'
        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
        environmentServiceNameAzureRM: 'myserviceconnection'
 
