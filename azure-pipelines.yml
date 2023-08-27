@@ -1,0 +1,18 @@
+stages:
+  - stage: Dev
+    displayName: Dev
+    jobs:
+      - job: DeployADF
+        displayName: Deploy ADF
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - task: TerraformInstaller@0
+            inputs:
+              terraformVersion: '1.1.0'
+          - task: TerraformTaskV1@0
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+              backendServiceArm: 'myserviceconnection'
