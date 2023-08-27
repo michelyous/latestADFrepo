@@ -15,5 +15,5 @@ stages:
         provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-        backendServiceArm: 'your-arm-service-connection'
+        backendServiceArm: 'myserviceconnection'
 
