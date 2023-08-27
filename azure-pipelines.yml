@@ -16,4 +16,6 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         backendServiceArm: 'myserviceconnection'
+        backendAzureRmResourceGroupName: 'myResourceGroup'
+
 
