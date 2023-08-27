@@ -8,24 +8,9 @@ resource "azurerm_resource_group" "adf_rg" {
 }
 
 resource "azurerm_data_factory" "adf" {
-  name                = var.adf_name
-  resource_group_name = azurerm_resource_group.adf_rg.name
-  location            = var.location
-}
-
-variable "resource_group_name" {
-  description = "Name of the Azure resource group"
-  type        = string
-}
-
-variable "location" {
-  description = "Azure region for resources"
-  type        = string
-}
-
-variable "adf_name" {
-  description = "ADF Name"
-  type = string
+  name                = "myADF"
+  resource_group_name = "myResourceGroup"
+  location            = "francecentral"
 }
 
 resource "azurerm_data_factory_linked_service_azure_blob_storage" "source" {
