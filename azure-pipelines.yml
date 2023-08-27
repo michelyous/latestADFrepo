@@ -17,5 +17,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
         backendServiceArm: 'myserviceconnection'
         backendAzureRmResourceGroupName: 'myResourceGroup'
+        backendAzureRmStorageAccountName: 'mystorageaccountmichel'
+
 
 
