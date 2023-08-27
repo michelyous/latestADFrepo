@@ -19,6 +19,8 @@ stages:
         backendAzureRmResourceGroupName: 'myResourceGroup'
         backendAzureRmStorageAccountName: 'mystorageaccountmichel'
         backendAzureRmContainerName: 'mycontainer'
+        backendAzureRmKey: $(TerraformBackendKey)
+
 
 
 
