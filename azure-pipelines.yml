@@ -10,6 +10,10 @@ stages:
     - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
       inputs:
         terraformVersion: '1.1.0'
+
+    - script: |
+        az login --service-principal -u 0bf23499-13fa-4d33-abb6-25cda81a6f2c -p 92415e1f-4602-4247-a87b-d49e4e77f2f8 --tenant 785b36d1-6470-499f-9cc5-82a4b616c014
+      displayName: 'Azure CLI Login'
     - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
       inputs:
         provider: 'azurerm'
