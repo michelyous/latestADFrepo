@@ -45,7 +45,7 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "destination" 
   connection_string = data.azurerm_storage_account.example.primary_connection_string
 }
 
-resource "azurerm_data_factory_dataset_blob" "input_dataset" {
+resource "azurerm_data_factory_dataset" "input_dataset" {
   name                = "input_dataset"
   data_factory_name   = azurerm_data_factory.adf.name
   resource_group_name = azurerm_resource_group.adf_rg.name
@@ -87,7 +87,7 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
       }
       inputs = [
         {
-          referenceName = azurerm_data_factory_dataset_blob.input_dataset.name
+          referenceName = azurerm_data_factory_dataset.input_dataset.name
           type          = "DatasetReference"
         }
       ]
@@ -104,7 +104,6 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
     }
   ])
 }
-
 
 # resource "azurerm_data_factory_pipeline" "copy_data" {
 #   name                = "copy_data_pipeline"
