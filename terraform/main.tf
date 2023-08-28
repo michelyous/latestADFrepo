@@ -94,21 +94,14 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
   name            = "copy_data_pipeline"
   data_factory_id = azurerm_data_factory.adf.id
 
-  activities_json = jsonencode({
-    copy_data_activity = {
-      type         = "Copy"
-      inputs       = [
-        {
-          referenceName = "input_blob"
-          type          = "DatasetReference"
-        }
-      ]
-      outputs      = [
-        {
-          referenceName = "output_blob"
-          type          = "DatasetReference"
-        }
-      ]
+  activities_json = jsonencode([
+    {
+      name           = "copy_data_activity"
+      type           = "Copy"
+      linkedServiceName = {
+        referenceName = azurerm_data_factory_linked_service_azure_blob_storage.source.name
+        type          = "LinkedServiceReference"
+      }
       typeProperties = {
         source = {
           type          = "BlobSource"
@@ -118,15 +111,26 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
           type          = "BlobSink"
           blobPathPrefix = "outputcontainer/outputblob.csv"
         }
-        copyBehavior = "PreserveHierarchy"
+        copyBehavior   = "PreserveHierarchy"
       }
-      policy = [
+      inputs = [
         {
-          concurrency     = 1
-          execution_order = 0
+          referenceName = "input_dataset"
+          type          = "DatasetReference"
         }
       ]
+      outputs = [
+        {
+          referenceName = "output_dataset"
+          type          = "DatasetReference"
+        }
+      ]
+      policy = {
+        concurrency     = 1
+        execution_order = 0
+      }
     }
-  })
+  ])
 }
+
 
