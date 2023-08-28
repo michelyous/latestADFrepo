@@ -25,7 +25,7 @@ variable "location" {
 
 variable "adf_name" {
   description = "ADF Name"
-  type = string
+  type        = string
 }
 
 resource "azurerm_data_factory_linked_service_azure_blob_storage" "source" {
@@ -40,10 +40,71 @@ data "azurerm_storage_account" "example" {
 }
 
 resource "azurerm_data_factory_linked_service_azure_blob_storage" "destination" {
-  name                = "destination-storage"
+  name            = "destination-storage"
   data_factory_id = azurerm_data_factory.adf.id
   connection_string = data.azurerm_storage_account.example.primary_connection_string
 }
+
+resource "azurerm_data_factory_dataset_blob" "input_dataset" {
+  name                = "input_dataset"
+  data_factory_name   = azurerm_data_factory.adf.name
+  resource_group_name = azurerm_resource_group.adf_rg.name
+  linked_service_name = azurerm_data_factory_linked_service_azure_blob_storage.source.name
+
+  structure {
+    type = "Csv"
+    location {
+      type            = "AzureBlobStorageLocation"
+      container       = "inputcontainer"
+      folder_path     = "inputfolder"
+      file_name       = "inputblob.csv"
+    }
+  }
+}
+
+resource "azurerm_data_factory_pipeline" "copy_data" {
+  name            = "copy_data_pipeline"
+  data_factory_id = azurerm_data_factory.adf.id
+
+  activities_json = jsonencode([
+    {
+      name           = "copy_data_activity"
+      type           = "Copy"
+      linkedServiceName = {
+        referenceName = azurerm_data_factory_linked_service_azure_blob_storage.source.name
+        type          = "LinkedServiceReference"
+      }
+      typeProperties = {
+        source = {
+          type          = "BlobSource"
+          blobPathPrefix = "inputcontainer/inputblob.csv"
+        }
+        sink = {
+          type          = "BlobSink"
+          blobPathPrefix = "outputcontainer/outputblob.csv"
+        }
+        copyBehavior   = "PreserveHierarchy"
+      }
+      inputs = [
+        {
+          referenceName = azurerm_data_factory_dataset_blob.input_dataset.name
+          type          = "DatasetReference"
+        }
+      ]
+      outputs = [
+        {
+          referenceName = "output_dataset"
+          type          = "DatasetReference"
+        }
+      ]
+      policy = {
+        concurrency     = 1
+        execution_order = 0
+      }
+    }
+  ])
+}
+
 
 # resource "azurerm_data_factory_pipeline" "copy_data" {
 #   name                = "copy_data_pipeline"
@@ -89,48 +150,3 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "destination" 
 # ]
 #   JSON
 # }
-
-resource "azurerm_data_factory_pipeline" "copy_data" {
-  name            = "copy_data_pipeline"
-  data_factory_id = azurerm_data_factory.adf.id
-
-  activities_json = jsonencode([
-    {
-      name           = "copy_data_activity"
-      type           = "Copy"
-      linkedServiceName = {
-        referenceName = azurerm_data_factory_linked_service_azure_blob_storage.source.name
-        type          = "LinkedServiceReference"
-      }
-      typeProperties = {
-        source = {
-          type          = "BlobSource"
-          blobPathPrefix = "inputcontainer/inputblob.csv"
-        }
-        sink = {
-          type          = "BlobSink"
-          blobPathPrefix = "outputcontainer/outputblob.csv"
-        }
-        copyBehavior   = "PreserveHierarchy"
-      }
-      inputs = [
-        {
-          referenceName = "input_dataset"
-          type          = "DatasetReference"
-        }
-      ]
-      outputs = [
-        {
-          referenceName = "output_dataset"
-          type          = "DatasetReference"
-        }
-      ]
-      policy = {
-        concurrency     = 1
-        execution_order = 0
-      }
-    }
-  ])
-}
-
-
