@@ -45,23 +45,6 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "destination" 
   connection_string = data.azurerm_storage_account.example.primary_connection_string
 }
 
-resource "azurerm_data_factory_dataset" "input_dataset" {
-  name                = "input_dataset"
-  data_factory_name   = azurerm_data_factory.adf.name
-  resource_group_name = azurerm_resource_group.adf_rg.name
-  linked_service_name = azurerm_data_factory_linked_service_azure_blob_storage.source.name
-
-  structure {
-    type = "Csv"
-    location {
-      type            = "AzureBlobStorageLocation"
-      container       = "inputcontainer"
-      folder_path     = "inputfolder"
-      file_name       = "inputblob.csv"
-    }
-  }
-}
-
 resource "azurerm_data_factory_pipeline" "copy_data" {
   name            = "copy_data_pipeline"
   data_factory_id = azurerm_data_factory.adf.id
@@ -84,19 +67,15 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
           blobPathPrefix = "outputcontainer/outputblob.csv"
         }
         copyBehavior   = "PreserveHierarchy"
-      }
-      inputs = [
-        {
-          referenceName = azurerm_data_factory_dataset.input_dataset.name
+        inputDataset = {
+          referenceName = "input_dataset"
           type          = "DatasetReference"
         }
-      ]
-      outputs = [
-        {
+        outputDataset = {
           referenceName = "output_dataset"
           type          = "DatasetReference"
         }
-      ]
+      }
       policy = {
         concurrency     = 1
         execution_order = 0
@@ -104,6 +83,7 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
     }
   ])
 }
+
 
 # resource "azurerm_data_factory_pipeline" "copy_data" {
 #   name                = "copy_data_pipeline"
