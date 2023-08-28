@@ -35,7 +35,7 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "source" {
 }
 
 data "azurerm_storage_account" "example" {
-  name                = "mystorageaccountname"
+  name                = "mystorageaccountmichel"
   resource_group_name = azurerm_resource_group.adf_rg.name
 }
 
