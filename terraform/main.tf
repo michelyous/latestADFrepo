@@ -45,47 +45,88 @@ resource "azurerm_data_factory_linked_service_azure_blob_storage" "destination" 
   connection_string = data.azurerm_storage_account.example.primary_connection_string
 }
 
+# resource "azurerm_data_factory_pipeline" "copy_data" {
+#   name                = "copy_data_pipeline"
+#   data_factory_id = azurerm_data_factory.adf.id
+
+#   activities_json = <<JSON
+# [
+#     {
+#         "name": "copy_data_activity",
+#         "type": "Copy",
+#         "inputs": [
+#           {
+#             "referenceName" = "input_blob",
+#             "type"           = "DatasetReference"
+#           }
+#         ],
+#         "outputs": [
+#           {
+#             "referenceName" = "output_blob",
+#             "type"           = "DatasetReference"
+#           }
+#         ],
+
+#         "typeProperties": [
+#           "source": {
+#             "type" = "BlobSource",
+#             "blobPathPrefix" = "inputcontainer/inputblob.csv"
+#           },
+#           "sink": {
+#              "type" = "BlobSink",
+#               "blobPathPrefix" = "outputcontainer/outputblob.csv"
+#           },
+#           "copyBehavior" = "PreserveHierarchy"
+#         ],
+
+#         "policy": [
+#           {
+#             "concurrency" = 1,
+#             "execution_order" = 0
+#           }
+#         ]
+#     }
+# ]
+#   JSON
+# }
+
 resource "azurerm_data_factory_pipeline" "copy_data" {
-  name                = "copy_data_pipeline"
+  name            = "copy_data_pipeline"
   data_factory_id = azurerm_data_factory.adf.id
 
-  activities_json = <<JSON
-[
+  activities_json = jsonencode([
     {
-        "name": "copy_data_activity",
-        "type": "Copy",
-        "inputs": [
-          {
-            "referenceName" = "input_blob",
-            "type"           = "DatasetReference"
-          }
-        ],
-        "outputs": [
-          {
-            "referenceName" = "output_blob",
-            "type"           = "DatasetReference"
-          }
-        ],
-
-        "typeProperties": [
-          "source": {
-            "type" = "BlobSource",
-            "blobPathPrefix" = "inputcontainer/inputblob.csv"
-          },
-          "sink": {
-             "type" = "BlobSink",
-              "blobPathPrefix" = "outputcontainer/outputblob.csv"
-          },
-          "copyBehavior" = "PreserveHierarchy"
-        ],
-
-        "policy": [
-          {
-            "concurrency" = 1,
-            "execution_order" = 0
-          }
-        ]
+      name     = "copy_data_activity"
+      type     = "Copy"
+      inputs   = [
+        {
+          referenceName = "input_blob"
+          type          = "DatasetReference"
+        }
+      ]
+      outputs  = [
+        {
+          referenceName = "output_blob"
+          type          = "DatasetReference"
+        }
+      ]
+      typeProperties = {
+        source = {
+          type          = "BlobSource"
+          blobPathPrefix = "inputcontainer/inputblob.csv"
+        }
+        sink = {
+          type          = "BlobSink"
+          blobPathPrefix = "outputcontainer/outputblob.csv"
+        }
+        copyBehavior = "PreserveHierarchy"
+      }
+      policy = [
+        {
+          concurrency     = 1
+          execution_order = 0
+        }
+      ]
     }
-]
-  JSON
+  ])
 }
