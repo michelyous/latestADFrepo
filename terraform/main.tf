@@ -94,17 +94,16 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
   name            = "copy_data_pipeline"
   data_factory_id = azurerm_data_factory.adf.id
 
-  activities_json = jsonencode([
-    {
-      name     = "copy_data_activity"
-      type     = "Copy"
-      inputs   = [
+  activities_json = jsonencode({
+    copy_data_activity = {
+      type         = "Copy"
+      inputs       = [
         {
           referenceName = "input_blob"
           type          = "DatasetReference"
         }
       ]
-      outputs  = [
+      outputs      = [
         {
           referenceName = "output_blob"
           type          = "DatasetReference"
@@ -128,5 +127,6 @@ resource "azurerm_data_factory_pipeline" "copy_data" {
         }
       ]
     }
-  ])
+  })
 }
+
