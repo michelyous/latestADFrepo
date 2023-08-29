@@ -54,6 +54,13 @@ stages:
            backendAzureRmStorageAccountName: 'mystorageaccountqamichel'
            backendAzureRmContainerName: 'mycontainerqa'
            backendAzureRmKey: $(TF_BACKEND_KEY_QA)
+       - task:
+         inputs:
+           provider: 'azurerm'
+           command: 'apply'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+           environmentServiceNameAzureRM: 'myserviceconnection'
+
 
 
 
