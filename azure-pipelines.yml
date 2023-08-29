@@ -50,6 +50,10 @@ stages:
            command: 'init'
            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
            backendServiceArm: 'myserviceconnection'
+           backendAzureRmResourceGroupName: 'myResourceGroupQA'
+           backendAzureRmStorageAccountName: 'mystorageaccountqamichel'
+           backendAzureRmContainerName: 'mycontainerqa'
+           backendAzureRmKey: 
 
 
 
