@@ -54,7 +54,7 @@ stages:
            backendAzureRmStorageAccountName: 'mystorageaccountqamichel'
            backendAzureRmContainerName: 'mycontainerqa'
            backendAzureRmKey: $(TF_BACKEND_KEY_QA)
-       - task:
+       - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
          inputs:
            provider: 'azurerm'
            command: 'apply'
