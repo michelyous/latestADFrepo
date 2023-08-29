@@ -84,7 +84,7 @@ stages:
            backendAzureRmResourceGroupName: 'myResourceGroupQA'
            backendAzureRmStorageAccountName: 'mystorageaccountprodmich'
            backendAzureRmContainerName: 'mycontainerprof'
-           backendAzureRmKey: 
+           backendAzureRmKey: $(TF_BACKEND_KEY_PROD)
        - task: JasonBJohnson.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
          inputs:
            provider: 'azurerm'
