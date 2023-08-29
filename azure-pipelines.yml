@@ -53,7 +53,7 @@ stages:
            backendAzureRmResourceGroupName: 'myResourceGroupQA'
            backendAzureRmStorageAccountName: 'mystorageaccountqamichel'
            backendAzureRmContainerName: 'mycontainerqa'
-           backendAzureRmKey: 
+           backendAzureRmKey: $(TF_BACKEND_KEY_QA)
 
 
 
