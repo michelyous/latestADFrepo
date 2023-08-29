@@ -29,6 +29,24 @@ stages:
        command: 'apply'
        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
        environmentServiceNameAzureRM: 'myserviceconnection'
+       
+- stage: QA
+  displayName: QA
+  jobs:
+   - job: DeployADF
+     displayName: Deploy ADF
+     pool:
+      vmImage: ubuntu-latest
+     steps:
+       - task: TerraformInstaller@0
+         inputs:
+           terraformVersion: '1.1.0'
+       - task: TerraformCLI@0
+         inputs:
+           provider: 'azurerm'
+           command: 'init'
+           workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+           backendServiceArm: 
 
 
 
